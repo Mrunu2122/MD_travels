@@ -1,0 +1,13 @@
+{% extends 'travel/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Add New Trip</h2>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Save Trip</button>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

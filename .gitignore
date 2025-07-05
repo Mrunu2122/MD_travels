@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.log
+
+# Env
+env/
+venv/
+ENV/
+*.env
+
+# VSCode
+.vscode/
+
+# Django DBs
+*.sqlite3
+db.sqlite3
+
+# Mac system files
+.DS_Store
+
+# Pytest cache
+.pytest_cache/
+
+# Migrations (optional — if you regenerate them)
+# Uncomment if you don’t want to track migrations
+# */migrations/
+# !*/migrations/__init__.py
+
+# Compiled assets
+staticfiles/
+static/
+media/
+
+# Node modules (if ever used)
+node_modules/
+
+# Secret config files (optional)
+secrets.json

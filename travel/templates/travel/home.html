@@ -1,0 +1,123 @@
+{% extends 'travel/base.html' %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-5 fw-bold text-primary">MD Travels</h1>
+    <p class="text-muted">Your daily travel earnings dashboard</p>
+</div>
+
+<!-- Total Earnings Card -->
+<div class="row mb-4">
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">📅 Date: {{ today }}</h5>
+                <h4 class="card-text text-success">💰 Total Earnings: ₹{{ total_earnings }}</h4>
+                <a class="btn btn-success mt-3" target="_blank"
+                   href="https://wa.me/?text={{ whatsapp_text|urlencode }}">
+                    📤 Share on WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Weekly & Monthly Earnings Graphs -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h5 class="text-center">📈 Weekly Earnings</h5>
+            <canvas id="weeklyChart"></canvas>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h5 class="text-center">📅 Monthly Earnings</h5>
+            <canvas id="monthlyChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Trip List -->
+<div class="row mb-4">
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                Today's Trips
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for trip in trips %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ trip.destination }}
+                        <span class="badge bg-secondary">₹{{ trip.fare }}</span>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-muted">No trips today.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Add Trip Button -->
+<div class="text-center">
+    <a href="{% url 'add_trip' %}" class="btn btn-outline-primary btn-lg">➕ Add New Trip</a>
+</div>
+
+<!-- Quick Entry Button -->
+<div class="text-center mt-3">
+    <a href="{% url 'quick_entry' %}" class="btn btn-outline-success btn-lg">📝 Quick Earnings Entry</a>
+</div>
+
+
+<!-- Chart.js CDN + Graph Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+
+    const weeklyChart = new Chart(weeklyCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ weekly_labels|safe }},
+            datasets: [{
+                label: 'Earnings (₹)',
+                data: {{ weekly_earnings|safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    const monthlyChart = new Chart(monthlyCtx, {
+        type: 'line',
+        data: {
+            labels: {{ monthly_labels|safe }},
+            datasets: [{
+                label: 'Earnings (₹)',
+                data: {{ monthly_earnings|safe }},
+                backgroundColor: 'rgba(255, 99, 132, 0.4)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
