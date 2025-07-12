@@ -13,6 +13,7 @@
             <div class="card-body">
                 <h5 class="card-title">📅 Date: {{ today }}</h5>
                 <h4 class="card-text text-success">💰 Total Earnings: ₹{{ total_earnings }}</h4>
+                <p class="text-muted">🧾 Total Trips: {{ total_trips }}</p>
                 <a class="btn btn-success mt-3" target="_blank"
                    href="https://wa.me/?text={{ whatsapp_text|urlencode }}">
                     📤 Share on WhatsApp
@@ -21,6 +22,37 @@
         </div>
     </div>
 </div>
+
+<!-- Daily Summary Breakdown -->
+{% if summary %}
+<div class="row mb-4">
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                Platform Summary (Quick Entry)
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between">
+                    <strong>Ola</strong>
+                    <span>{{ summary.ola_trips }} trips — ₹{{ summary.ola_earnings }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <strong>Uber</strong>
+                    <span>{{ summary.uber_trips }} trips — ₹{{ summary.uber_earnings }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <strong>Rapido</strong>
+                    <span>{{ summary.rapido_trips }} trips — ₹{{ summary.rapido_earnings }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between text-muted">
+                    <em>Hours Worked</em>
+                    <span>{{ summary.hours_worked }} hrs</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <!-- Weekly & Monthly Earnings Graphs -->
 <div class="row mb-4">
@@ -48,7 +80,12 @@
             <ul class="list-group list-group-flush">
                 {% for trip in trips %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ trip.destination }}
+                        <div>
+                            <strong>{{ trip.destination }}</strong>
+                            {% if trip.platform %}
+                                <small class="text-muted d-block">{{ trip.platform }}</small>
+                            {% endif %}
+                        </div>
                         <span class="badge bg-secondary">₹{{ trip.fare }}</span>
                     </li>
                 {% empty %}
@@ -68,7 +105,6 @@
 <div class="text-center mt-3">
     <a href="{% url 'quick_entry' %}" class="btn btn-outline-success btn-lg">📝 Quick Earnings Entry</a>
 </div>
-
 
 <!-- Chart.js CDN + Graph Script -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

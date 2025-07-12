@@ -7,7 +7,6 @@ from django.http import JsonResponse
 from django.contrib import messages
 
 from .models import Trip, DailySummary
-from .forms import TripForm
 from .forms import TripForm, DailySummaryForm
 
 
@@ -18,12 +17,15 @@ def home(request):
     trips = Trip.objects.filter(date=selected_date)
     summary = DailySummary.objects.filter(date=selected_date).first()
 
+    # Trip model earnings and count
     trip_earnings = trips.aggregate(Sum('fare'))['fare__sum'] or 0
     trip_count = trips.count()
 
-    summary_earnings = summary.total_earnings if summary else 0
-    summary_count = summary.trip_count if summary else 0
+    # DailySummary earnings and count
+    summary_earnings = summary.total_earnings() if summary else 0
+    summary_count = summary.total_trips() if summary else 0
 
+    # Combined totals
     total_earnings = trip_earnings + summary_earnings
     total_trips = trip_count + summary_count
 
@@ -33,21 +35,23 @@ def home(request):
         f"Total Earnings: ₹{total_earnings}"
     )
 
+    # Weekly data for chart
     today = date.today()
     week_dates = [today - timedelta(days=i) for i in range(6, -1, -1)]
     weekly_data = []
     for d in week_dates:
         trip_sum = Trip.objects.filter(date=d).aggregate(Sum('fare'))['fare__sum'] or 0
         summary = DailySummary.objects.filter(date=d).first()
-        total = trip_sum + (summary.total_earnings if summary else 0)
+        total = trip_sum + (summary.total_earnings() if summary else 0)
         weekly_data.append({'date': d.strftime('%a'), 'total': float(total)})
 
+    # Monthly data for chart
     month_dates = [today - timedelta(days=i) for i in range(29, -1, -1)]
     monthly_data = []
     for d in month_dates:
         trip_sum = Trip.objects.filter(date=d).aggregate(Sum('fare'))['fare__sum'] or 0
         summary = DailySummary.objects.filter(date=d).first()
-        total = trip_sum + (summary.total_earnings if summary else 0)
+        total = trip_sum + (summary.total_earnings() if summary else 0)
         monthly_data.append({'date': d.strftime('%d %b'), 'total': float(total)})
 
     context = {

@@ -2,10 +2,61 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Quick Total Earnings Entry</h2>
+    <h2>📝 Quick Daily Summary Entry</h2>
     <form method="POST" novalidate>
         {% csrf_token %}
-        {{ form.as_p }}
+        
+        <div class="mb-3">
+            {{ form.date.label_tag }}
+            {{ form.date }}
+        </div>
+        <div class="mb-3">
+            {{ form.hours_worked.label_tag }}
+            {{ form.hours_worked }}
+        </div>
+
+        <!-- OLA -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form.ola_trips.label_tag }}
+                {{ form.ola_trips }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.ola_earnings.label_tag }}
+                {{ form.ola_earnings }}
+            </div>
+        </div>
+
+        <!-- UBER -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form.uber_trips.label_tag }}
+                {{ form.uber_trips }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.uber_earnings.label_tag }}
+                {{ form.uber_earnings }}
+            </div>
+        </div>
+
+        <!-- RAPIDO -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form.rapido_trips.label_tag }}
+                {{ form.rapido_trips }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.rapido_earnings.label_tag }}
+                {{ form.rapido_earnings }}
+            </div>
+        </div>
+
+        <!-- EXTRA INCOME -->
+        <div class="mb-3">
+            {{ form.manual_total_income.label_tag }}
+            {{ form.manual_total_income }}
+        </div>
+
         <button type="submit" class="btn btn-success">💾 Save Summary</button>
         <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
     </form>
