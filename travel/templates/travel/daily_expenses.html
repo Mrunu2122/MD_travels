@@ -1,0 +1,57 @@
+{% extends 'travel/base.html' %}
+{% block content %}
+<div class="text-center mb-4">
+    <h2 class="fw-bold text-primary">🧾 Daily Expenses</h2>
+    <p class="text-muted">Track your fuel and basic daily expenses</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="id_date" class="form-label">Date</label>
+                        {{ form.date }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_petrol_cng_expense" class="form-label">⛽ Petrol / CNG (₹)</label>
+                        {{ form.petrol_cng_expense }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_basic_expense" class="form-label">📦 Basic Expenses (₹)</label>
+                        {{ form.basic_expense }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-success">
+                            💰 Total so far: ₹<span id="total" data-original="{{ existing_total|default:'0.00' }}">{{ existing_total|default:'0.00' }}</span>
+                        </label>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success">💾 Save Expense</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateTotal() {
+        const petrol = parseFloat(document.getElementById("id_petrol_cng_expense").value) || 0;
+        const basic = parseFloat(document.getElementById("id_basic_expense").value) || 0;
+        const original = parseFloat(document.getElementById("total").getAttribute("data-original")) || 0;
+        const updated = petrol + basic;
+        document.getElementById("total").innerText = updated.toFixed(2);
+    }
+
+    document.getElementById("id_petrol_cng_expense").addEventListener("input", updateTotal);
+    document.getElementById("id_basic_expense").addEventListener("input", updateTotal);
+</script>
+{% endblock %}

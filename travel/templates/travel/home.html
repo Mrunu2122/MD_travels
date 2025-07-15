@@ -6,14 +6,18 @@
     <p class="text-muted">Your daily travel earnings dashboard</p>
 </div>
 
-<!-- Total Earnings Card -->
+<!-- Updated Earnings Card with Breakdown -->
 <div class="row mb-4">
     <div class="col-md-6 offset-md-3">
         <div class="card shadow-sm">
             <div class="card-body">
                 <h5 class="card-title">📅 Date: {{ today }}</h5>
-                <h4 class="card-text text-success">💰 Total Earnings: ₹{{ total_earnings }}</h4>
-                <p class="text-muted">🧾 Total Trips: {{ total_trips }}</p>
+
+                <p class="mb-1">🚗 <strong>Trip Earnings:</strong> ₹{{ trip_earnings }}</p>
+                <p class="mb-1">🧾 <strong>Total Expenses:</strong> ₹{{ expense_total }}</p>
+                <h4 class="text-success mt-3">💰 Net Earnings: ₹{{ total_earnings }}</h4>
+                <p class="text-muted">📊 Total Trips: {{ total_trips }}</p>
+
                 <a class="btn btn-success mt-3" target="_blank"
                    href="https://wa.me/?text={{ whatsapp_text|urlencode }}">
                     📤 Share on WhatsApp
@@ -22,6 +26,7 @@
         </div>
     </div>
 </div>
+
 
 
 

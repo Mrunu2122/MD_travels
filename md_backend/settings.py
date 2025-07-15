@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-2#jwjz7$!-dycnmdq9^ezs%37#m8ia4yu7=c7nronmfbsl8f6%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['md-travels.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'md-travels.onrender.com']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'travel',
+    'sslserver',
 ]
 
 MIDDLEWARE = [
@@ -129,7 +130,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Security settings for production
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 X_FRAME_OPTIONS = 'DENY'
-SECURE_SSL_REDIRECT = True 
+SECURE_SSL_REDIRECT = False

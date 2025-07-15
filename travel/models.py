@@ -6,6 +6,7 @@ PLATFORM_CHOICES = [
     ('rapido', 'Rapido'),
 ]
 
+
 class Trip(models.Model):
     destination = models.CharField(max_length=100)
     fare = models.DecimalField(max_digits=8, decimal_places=2)
@@ -14,6 +15,18 @@ class Trip(models.Model):
 
     def __str__(self):
         return f"{self.destination} - ₹{self.fare} ({self.platform})"
+
+
+class DailyExpense(models.Model):
+    date = models.DateField(unique=True)
+    petrol_cng_expense = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    basic_expense = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def total_expense(self):
+        return self.petrol_cng_expense + self.basic_expense
+
+    def __str__(self):
+        return f"{self.date} - ₹{self.total_expense()} total expense"
 
 
 class DailySummary(models.Model):
@@ -41,7 +54,16 @@ class DailySummary(models.Model):
 
     def total_earnings(self):
         platform_total = self.ola_earnings + self.uber_earnings + self.rapido_earnings
-        return platform_total + self.manual_total_income
+        total_income = platform_total + self.manual_total_income
+
+        # Subtract Daily Expenses
+        try:
+            expense = DailyExpense.objects.get(date=self.date)
+            total_income -= expense.total_expense()
+        except DailyExpense.DoesNotExist:
+            pass
+
+        return total_income
 
     def __str__(self):
         return f"{self.date} - ₹{self.total_earnings()} for {self.total_trips()} trips"
